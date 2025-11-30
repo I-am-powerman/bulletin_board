@@ -10,12 +10,47 @@ $connect = connectDB(
 	$password
 	);
 
+// переход ко всем категориям
 $route = '^/$'; 
 if (preg_match("#$route#", $url, $params)) {
-	$page = include 'view/page/showInfSity.php';
+	$data = include 'scripts/allCategories.php';
 }
 
-$route = '^/page/(?<country>[A-Za-z0-9_-]+)$';
+// пользьзователь входит в свою учетку
+$route = '^/login$';
 if (preg_match("#$route#", $url, $params)) {
-	$page = include 'view/page/showAllSityCountry.php';
+	$data = include 'scripts/login.php';
 }
+
+// пользьзователь выходит из своей учетки
+$route = '^/logout$';
+if (preg_match("#$route#", $url, $params)) {
+	$data = include 'scripts/logout.php';
+}
+
+// переход ко всем объявлениям в категории
+$route = '^/(?<category>[A-Za-z0-9_-]+)$';
+if (preg_match("#$route#", $url, $params)) {
+	$data = include 'scripts/allAnnonInCat.php';
+}
+
+// переход ко всем объявлениям в категории
+$route = '^/(?<category>[A-Za-z0-9_-]+)/(?<announc>[A-Za-z0-9_-]+)$';
+if (preg_match("#$route#", $url, $params)) {
+	$data = include 'scripts/allAnnonInCat.php';
+}
+
+// добавление нового объявления
+$route = '^/new_announc$';
+if (preg_match("#$route#", $url, $params)) {
+	include 'scripts/newAnnounc.php';
+}
+
+// проверка на массив
+if(is_array($data)){
+	// Преобразование в JSON
+	$json = json_encode($data);
+
+	echo ($json);
+}
+
